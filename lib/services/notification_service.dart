@@ -24,25 +24,27 @@ class NotificationService {
     tz.initializeTimeZones();
 
     await flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-      onDidReceiveNotificationResponse: (NotificationResponse response) {
-        // Handle notification tap
-      },
+      settings: initializationSettings,
     );
   }
 
-  Future<void> scheduleClassReminder(int id, String title, String venue, DateTime scheduledTime) async {
+  Future<void> scheduleClassReminder({
+    required int id,
+    required String title,
+    required String venue,
+    required DateTime scheduledTime,
+  }) async {
     // Schedule 30 minutes before
     final reminderTime = scheduledTime.subtract(const Duration(minutes: 30));
     
     if (reminderTime.isBefore(DateTime.now())) return;
 
     await flutterLocalNotificationsPlugin.zonedSchedule(
-      id,
-      'Class Reminder: $title',
-      'Starts at ${scheduledTime.hour}:${scheduledTime.minute.toString().padLeft(2, '0')} in $venue',
-      tz.TZDateTime.from(reminderTime, tz.local),
-      const NotificationDetails(
+      id: id,
+      title: 'Class Reminder: $title',
+      body: 'Starts at ${scheduledTime.hour}:${scheduledTime.minute.toString().padLeft(2, '0')} in $venue',
+      scheduledDate: tz.TZDateTime.from(reminderTime, tz.local),
+      notificationDetails: const NotificationDetails(
         android: AndroidNotificationDetails(
           'class_reminders',
           'Class Reminders',
@@ -52,12 +54,11 @@ class NotificationService {
         ),
       ),
       androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
-      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.dayOfWeekAndTime,
     );
   }
 
   Future<void> cancelNotification(int id) async {
-    await flutterLocalNotificationsPlugin.cancel(id);
+    await flutterLocalNotificationsPlugin.cancel(id: id);
   }
 }

@@ -109,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
         decoration: BoxDecoration(
           gradient: const LinearGradient(colors: [Color(0xFF2E7D32), Color(0xFF66BB6A)]),
           borderRadius: BorderRadius.circular(20),
-          boxShadow: [BoxShadow(color: Colors.green.withOpacity(0.3), blurRadius: 10, offset: const Offset(0, 5))],
+          boxShadow: [BoxShadow(color: Colors.green.withAlpha(76), blurRadius: 10, offset: const Offset(0, 5))],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -150,8 +150,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   return Card(
                     child: ListTile(
                       leading: CircleAvatar(
-                        backgroundColor: Theme.of(context).primaryColor.withOpacity(0.1),
-                        child: Text(c.name[0].toUpperCase(), style: TextStyle(color: Theme.of(context).primaryColor)),
+                        backgroundColor: Theme.of(context).colorScheme.primary.withAlpha(25),
+                        child: Text(c.name[0].toUpperCase(), style: TextStyle(color: Theme.of(context).colorScheme.primary)),
                       ),
                       title: Text(c.name, style: const TextStyle(fontWeight: FontWeight.bold)),
                       subtitle: Text('${c.time} • ${c.venue}'),
@@ -178,7 +178,7 @@ class _HomeScreenState extends State<HomeScreen> {
           TextButton(
             onPressed: () async {
               await DatabaseService.instance.markAttendance(c.id!, false);
-              Navigator.pop(context);
+              if (context.mounted) Navigator.pop(context);
               _loadTodayClasses();
             },
             child: const Text('Absent', style: TextStyle(color: Colors.red)),
@@ -186,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ElevatedButton(
             onPressed: () async {
               await DatabaseService.instance.markAttendance(c.id!, true);
-              Navigator.pop(context);
+              if (context.mounted) Navigator.pop(context);
               _loadTodayClasses();
             },
             child: const Text('Present'),

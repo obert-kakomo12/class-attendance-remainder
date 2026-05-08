@@ -73,15 +73,13 @@ class _AddClassScreenState extends State<AddClassScreen> {
 
       // Schedule notification
       final now = DateTime.now();
-      // Calculate next occurrence of this day and time
-      // This is a simplified version for MVP
       final scheduledDateTime = DateTime(now.year, now.month, now.day, _selectedTime.hour, _selectedTime.minute);
       
       await NotificationService().scheduleClassReminder(
-        resultId, 
-        _nameController.text, 
-        _venueController.text, 
-        scheduledDateTime
+        id: resultId, 
+        title: _nameController.text, 
+        venue: _venueController.text, 
+        scheduledTime: scheduledDateTime
       );
 
       if (mounted) Navigator.pop(context);
@@ -106,7 +104,7 @@ class _AddClassScreenState extends State<AddClassScreen> {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                value: _selectedDay,
+                initialValue: _selectedDay,
                 decoration: const InputDecoration(labelText: 'Day', border: OutlineInputBorder()),
                 items: _days.map((day) => DropdownMenuItem(value: day, child: Text(day))).toList(),
                 onChanged: (value) => setState(() => _selectedDay = value!),
@@ -129,7 +127,7 @@ class _AddClassScreenState extends State<AddClassScreen> {
               ElevatedButton(
                 onPressed: _saveClass,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).primaryColor,
+                  backgroundColor: Theme.of(context).colorScheme.primary,
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
