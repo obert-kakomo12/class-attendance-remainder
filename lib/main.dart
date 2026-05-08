@@ -31,7 +31,9 @@ class ClassTrackApp extends StatelessWidget {
           elevation: 2,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
+
       ),
+
       home: const HomeScreen(),
     );
   }

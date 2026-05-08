@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
@@ -14,6 +15,7 @@ class NotificationService {
   NotificationService._internal();
 
   Future<void> init() async {
+    developer.log('Initializing Notification Service...');
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher');
 
@@ -23,22 +25,23 @@ class NotificationService {
 
     tz.initializeTimeZones();
 
-    await flutterLocalNotificationsPlugin.initialize(
-      settings: initializationSettings,
-    );
+    try {
+      await flutterLocalNotificationsPlugin.initialize(
+        settings: initializationSettings,
+      );
+      developer.log('Notification Service Initialized.');
+    } catch (e) {
+      developer.log('Notification Init Failed: $e', error: e, name: 'NotificationService');
+    }
   }
 
-  Future<void> scheduleClassReminder({
-    required int id,
-    required String title,
-    required String venue,
-    required DateTime scheduledTime,
-  }) async {
+  Future<void> scheduleClassReminder(int id, String title, String venue, DateTime scheduledTime) async {
     // Schedule 30 minutes before
     final reminderTime = scheduledTime.subtract(const Duration(minutes: 30));
     
     if (reminderTime.isBefore(DateTime.now())) return;
 
+    developer.log('Scheduling notification $id for $title at $reminderTime');
     await flutterLocalNotificationsPlugin.zonedSchedule(
       id: id,
       title: 'Class Reminder: $title',
@@ -61,4 +64,5 @@ class NotificationService {
   Future<void> cancelNotification(int id) async {
     await flutterLocalNotificationsPlugin.cancel(id: id);
   }
+
 }

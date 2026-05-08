@@ -62,6 +62,7 @@ class _TimetableScreenState extends State<TimetableScreen> with SingleTickerProv
 
   Widget _buildDayList(String day) {
     final dayClasses = _allClasses.where((c) => c.day == day).toList();
+    // Sort classes by time
     dayClasses.sort((a, b) => a.time.compareTo(b.time));
 
     if (dayClasses.isEmpty) {
@@ -120,6 +121,7 @@ class _TimetableScreenState extends State<TimetableScreen> with SingleTickerProv
               if (context.mounted) Navigator.pop(context);
               _loadClasses();
             },
+
             child: const Text('Delete', style: TextStyle(color: Colors.red)),
           ),
         ],

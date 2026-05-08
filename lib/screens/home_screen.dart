@@ -1,3 +1,4 @@
+import 'dart:developer' as developer;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../models/class_model.dart';
@@ -24,14 +25,22 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _loadTodayClasses() async {
+    developer.log('Loading classes for today...');
     setState(() => _isLoading = true);
-    final String currentDay = DateFormat('EEEE').format(DateTime.now());
-    final allAllClasses = await DatabaseService.instance.getAllClasses();
-    
-    setState(() {
-      _todayClasses = allAllClasses.where((c) => c.day == currentDay).toList();
-      _isLoading = false;
-    });
+    try {
+      final String currentDay = DateFormat('EEEE').format(DateTime.now());
+      final allAllClasses = await DatabaseService.instance.getAllClasses();
+      developer.log('Found ${allAllClasses.length} total classes.');
+      
+      setState(() {
+        _todayClasses = allAllClasses.where((c) => c.day == currentDay).toList();
+        _isLoading = false;
+      });
+      developer.log('Today has ${_todayClasses.length} classes.');
+    } catch (e) {
+      developer.log('Failed to load classes: $e', error: e, name: 'HomeScreen');
+      setState(() => _isLoading = false);
+    }
   }
 
   @override
