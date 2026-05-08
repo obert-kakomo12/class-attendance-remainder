@@ -106,7 +106,7 @@ class _AddClassScreenState extends State<AddClassScreen> {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
-                value: _selectedDay,
+                initialValue: _selectedDay,
                 decoration: const InputDecoration(labelText: 'Day', border: OutlineInputBorder()),
                 items: _days.map((day) => DropdownMenuItem(value: day, child: Text(day))).toList(),
                 onChanged: (value) => setState(() => _selectedDay = value!),
@@ -133,7 +133,6 @@ class _AddClassScreenState extends State<AddClassScreen> {
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
-
                 child: Text(widget.classToEdit == null ? 'CREATE CLASS' : 'UPDATE CLASS'),
               ),
             ],

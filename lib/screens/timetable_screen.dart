@@ -121,7 +121,6 @@ class _TimetableScreenState extends State<TimetableScreen> with SingleTickerProv
               if (context.mounted) Navigator.pop(context);
               _loadClasses();
             },
-
             child: const Text('Delete', style: TextStyle(color: Colors.red)),
           ),
         ],

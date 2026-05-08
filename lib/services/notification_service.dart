@@ -28,6 +28,10 @@ class NotificationService {
     try {
       await flutterLocalNotificationsPlugin.initialize(
         settings: initializationSettings,
+        onDidReceiveNotificationResponse: (NotificationResponse response) {
+          // Handle notification tap
+          developer.log('Notification tapped: ${response.payload}');
+        },
       );
       developer.log('Notification Service Initialized.');
     } catch (e) {
@@ -64,5 +68,4 @@ class NotificationService {
   Future<void> cancelNotification(int id) async {
     await flutterLocalNotificationsPlugin.cancel(id: id);
   }
-
 }

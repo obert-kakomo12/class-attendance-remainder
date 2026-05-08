@@ -12,3 +12,4 @@ Class Attendance & Reminder App for students.
 - Flutter
 - SQLite (Local Database)
 - Local Notifications
+
