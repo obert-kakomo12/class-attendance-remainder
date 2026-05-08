@@ -18,9 +18,7 @@ class ClassTrackApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
-          seedColor: const Color(0xFF2E7D32), // Professional Green
-          primary: const Color(0xFF2E7D32),
-          secondary: const Color(0xFF1B5E20),
+          seedColor: const Color(0xFF2E7D32),
         ),
         useMaterial3: true,
         appBarTheme: const AppBarTheme(
@@ -33,7 +31,9 @@ class ClassTrackApp extends StatelessWidget {
           elevation: 2,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
+
       ),
+
       home: const HomeScreen(),
     );
   }

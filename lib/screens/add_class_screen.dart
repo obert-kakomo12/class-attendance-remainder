@@ -133,6 +133,7 @@ class _AddClassScreenState extends State<AddClassScreen> {
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                 ),
+
                 child: Text(widget.classToEdit == null ? 'CREATE CLASS' : 'UPDATE CLASS'),
               ),
             ],
