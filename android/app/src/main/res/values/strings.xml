@@ -1,0 +1,19 @@
+<resources>
+    <string name="app_name">ClassTrack</string>
+    <string-array name="days_of_week">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
+
+    <string-array name="lead_times">
+        <item>15 Minutes</item>
+        <item>30 Minutes</item>
+        <item>45 Minutes</item>
+    </string-array>
+</resources>
+
