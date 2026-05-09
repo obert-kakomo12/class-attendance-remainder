@@ -29,11 +29,11 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() => _isLoading = true);
     try {
       final String currentDay = DateFormat('EEEE').format(DateTime.now());
-      final allAllClasses = await DatabaseService.instance.getAllClasses();
-      developer.log('Found ${allAllClasses.length} total classes.');
+      final allClasses = await DatabaseService.instance.getAllClasses();
+      developer.log('Found ${allClasses.length} total classes.');
       
       setState(() {
-        _todayClasses = allAllClasses.where((c) => c.day == currentDay).toList();
+        _todayClasses = allClasses.where((c) => c.day == currentDay).toList();
         _isLoading = false;
       });
       developer.log('Today has ${_todayClasses.length} classes.');

@@ -1,14 +1,4 @@
 pluginManagement {
-    val flutterSdkPath = {
-        val properties = java.util.Properties()
-        file("local.properties").inputStream().use { properties.load(it) }
-        val path = properties.getProperty("flutter.sdk")
-        require(path != null) { "flutter.sdk not set in local.properties" }
-        path
-    }()
-
-    includeBuild("$flutterSdkPath/packages/flutter_tools/gradle")
-
     repositories {
         google()
         mavenCentral()
@@ -17,11 +7,13 @@ pluginManagement {
 }
 
 plugins {
-    id("dev.flutter.flutter-gradle-plugin") version "1.0.0" apply false
+    id("com.android.application") version "7.4.2" apply false
+    id("com.android.library") version "7.4.2" apply false
+    id("org.jetbrains.kotlin.android") version "1.8.22" apply false
 }
 
 dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
     repositories {
         google()
         mavenCentral()
@@ -30,4 +22,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "classtrack"
 include(":app")
-
