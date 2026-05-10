@@ -21,11 +21,12 @@ public class ClassReminderReceiver extends BroadcastReceiver {
         String className = intent.getStringExtra("class_name");
         String venue = intent.getStringExtra("venue");
         int id = intent.getIntExtra("class_id", 0);
+        boolean isExactTime = intent.getBooleanExtra("is_exact_time", false);
 
-        showNotification(context, className, venue, id);
+        showNotification(context, className, venue, id, isExactTime);
     }
 
-    private void showNotification(Context context, String className, String venue, int id) {
+    private void showNotification(Context context, String className, String venue, int id, boolean isExactTime) {
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -56,10 +57,15 @@ public class ClassReminderReceiver extends BroadcastReceiver {
         boolean enableSound = prefs.getBoolean("enable_sound", true);
         int leadTime = prefs.getInt("reminder_minutes", 30);
 
+        String title = isExactTime ? "🚨 CLASS STARTING NOW" : "⏰ CLASS STARTING SOON";
+        String content = isExactTime ? 
+                className + " is starting now at " + venue :
+                className + " starts in " + leadTime + " mins at " + venue;
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("⏰ CLASS STARTING SOON")
-                .setContentText(className + " starts in " + leadTime + " mins at " + venue)
+                .setContentTitle(title)
+                .setContentText(content)
                 .setPriority(enableSound ? NotificationCompat.PRIORITY_MAX : NotificationCompat.PRIORITY_LOW)
                 .setCategory(NotificationCompat.CATEGORY_ALARM)
                 .setVibrate(enableSound ? new long[]{0, 500, 200, 500} : new long[]{0})
@@ -93,4 +99,3 @@ public class ClassReminderReceiver extends BroadcastReceiver {
         notificationManager.notify(id, builder.build());
     }
 }
-

@@ -24,6 +24,8 @@ public class AddClassActivity extends AppCompatActivity {
     private Button buttonSelectTime;
     private String selectedTime = "";
     private ClassViewModel classViewModel;
+    private int existingClassId = -1;
+    private ClassModel existingClass;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +54,34 @@ public class AddClassActivity extends AppCompatActivity {
         });
 
         buttonSave.setOnClickListener(v -> saveClass());
+
+        // Check if editing
+        existingClassId = getIntent().getIntExtra("class_id", -1);
+        if (existingClassId != -1) {
+            setTitle("Edit Class");
+            buttonSave.setText("Update Class");
+            classViewModel.getAllClasses().observe(this, classes -> {
+                for (ClassModel c : classes) {
+                    if (c.getId() == existingClassId) {
+                        existingClass = c;
+                        populateFields();
+                        break;
+                    }
+                }
+            });
+        }
+    }
+
+    private void populateFields() {
+        editTextName.setText(existingClass.getName());
+        editTextVenue.setText(existingClass.getVenue());
+        selectedTime = existingClass.getTime();
+        buttonSelectTime.setText(selectedTime);
+        
+        // Set spinner selection for day
+        ArrayAdapter<CharSequence> adapter = (ArrayAdapter<CharSequence>) spinnerDay.getAdapter();
+        int position = adapter.getPosition(existingClass.getDay());
+        spinnerDay.setSelection(position);
     }
 
     private void saveClass() {
@@ -64,15 +94,28 @@ public class AddClassActivity extends AppCompatActivity {
             return;
         }
 
-        ClassModel newClass = new ClassModel(name, day, selectedTime, venue, 0, 0);
-        classViewModel.insert(newClass, id -> {
-            newClass.setId((int) id);
-            com.classtrack.classtrack.receivers.NotificationScheduler.scheduleReminder(this, newClass);
-            runOnUiThread(() -> {
-                Toast.makeText(this, "Class saved and reminder set", Toast.LENGTH_SHORT).show();
-                finish();
+        if (existingClassId != -1 && existingClass != null) {
+            existingClass.setName(name);
+            existingClass.setVenue(venue);
+            existingClass.setDay(day);
+            existingClass.setTime(selectedTime);
+            
+            classViewModel.update(existingClass);
+            com.classtrack.classtrack.receivers.NotificationScheduler.cancelReminder(this, existingClassId);
+            com.classtrack.classtrack.receivers.NotificationScheduler.scheduleReminder(this, existingClass);
+            
+            Toast.makeText(this, "Class updated", Toast.LENGTH_SHORT).show();
+            finish();
+        } else {
+            ClassModel newClass = new ClassModel(name, day, selectedTime, venue, 0, 0);
+            classViewModel.insert(newClass, id -> {
+                newClass.setId((int) id);
+                com.classtrack.classtrack.receivers.NotificationScheduler.scheduleReminder(this, newClass);
+                runOnUiThread(() -> {
+                    Toast.makeText(this, "Class saved and reminder set", Toast.LENGTH_SHORT).show();
+                    finish();
+                });
             });
-        });
+        }
     }
 }
-

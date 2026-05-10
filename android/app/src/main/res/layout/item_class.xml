@@ -23,6 +23,8 @@
                 android:id="@+id/textViewClassName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_toStartOf="@+id/buttonMore"
+                android:layout_alignParentStart="true"
                 android:text="Module Name"
                 android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
                 android:textColor="@color/on_surface"
@@ -33,6 +35,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/textViewClassName"
+                android:layout_toStartOf="@+id/buttonMore"
                 android:text="Venue: Room 101"
                 android:textAppearance="@style/TextAppearance.Material3.BodySmall"
                 android:textColor="#64748B" />
@@ -41,10 +44,22 @@
                 android:id="@+id/textViewDayTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
+                android:layout_below="@id/textViewVenue"
+                android:layout_marginTop="4dp"
                 android:text="Mon, 10:00"
                 android:textAppearance="@style/TextAppearance.Material3.LabelLarge"
                 android:textColor="@color/primary" />
+
+            <ImageButton
+                android:id="@+id/buttonMore"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="false"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Options"
+                android:src="@android:drawable/ic_menu_more"
+                app:tint="#64748B" />
         </RelativeLayout>
 
         <com.google.android.material.progressindicator.LinearProgressIndicator

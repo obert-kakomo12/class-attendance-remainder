@@ -25,8 +25,19 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
         void onAttendanceClick(ClassModel classModel, boolean isPresent);
     }
 
+    public interface OnClassActionListener {
+        void onEditClick(ClassModel classModel);
+        void onDeleteClick(ClassModel classModel);
+    }
+
     public void setOnAttendanceClickListener(OnAttendanceClickListener listener) {
         this.listener = listener;
+    }
+
+    private OnClassActionListener actionListener;
+
+    public void setOnClassActionListener(OnClassActionListener actionListener) {
+        this.actionListener = actionListener;
     }
 
     public void setShowButtons(boolean showButtons) {
@@ -96,6 +107,23 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
         holder.buttonAbsent.setOnClickListener(v -> {
             if (listener != null) listener.onAttendanceClick(currentClass, false);
         });
+
+        holder.buttonMore.setOnClickListener(v -> {
+            android.widget.PopupMenu popup = new android.widget.PopupMenu(v.getContext(), v);
+            popup.getMenu().add("Edit");
+            popup.getMenu().add("Delete");
+            popup.setOnMenuItemClickListener(item -> {
+                if (actionListener != null) {
+                    if (item.getTitle().equals("Edit")) {
+                        actionListener.onEditClick(currentClass);
+                    } else if (item.getTitle().equals("Delete")) {
+                        actionListener.onDeleteClick(currentClass);
+                    }
+                }
+                return true;
+            });
+            popup.show();
+        });
     }
 
     @Override
@@ -115,6 +143,7 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
         private TextView textViewAttendance;
         private Button buttonPresent;
         private Button buttonAbsent;
+        private android.widget.ImageButton buttonMore;
         private com.google.android.material.progressindicator.LinearProgressIndicator attendanceProgress;
 
         public ClassViewHolder(@NonNull View itemView) {
@@ -125,8 +154,8 @@ public class ClassAdapter extends RecyclerView.Adapter<ClassAdapter.ClassViewHol
             textViewAttendance = itemView.findViewById(R.id.textViewAttendance);
             buttonPresent = itemView.findViewById(R.id.buttonPresent);
             buttonAbsent = itemView.findViewById(R.id.buttonAbsent);
+            buttonMore = itemView.findViewById(R.id.buttonMore);
             attendanceProgress = itemView.findViewById(R.id.attendanceProgress);
         }
     }
 }
-

@@ -14,8 +14,10 @@ public class ClassRepository {
     private ClassDao classDao;
     private LiveData<List<ClassModel>> allClasses;
     private ExecutorService executorService;
+    private android.app.Application application;
 
-    public ClassRepository(Application application) {
+    public ClassRepository(android.app.Application application) {
+        this.application = application;
         AppDatabase database = AppDatabase.getInstance(application);
         classDao = database.classDao();
         allClasses = classDao.getAllClasses();
@@ -38,7 +40,10 @@ public class ClassRepository {
     }
 
     public void delete(ClassModel classModel) {
-        executorService.execute(() -> classDao.delete(classModel));
+        executorService.execute(() -> {
+            com.classtrack.classtrack.receivers.NotificationScheduler.cancelReminder(application, classModel.getId());
+            classDao.delete(classModel);
+        });
     }
 
     public LiveData<List<ClassModel>> getAllClasses() {

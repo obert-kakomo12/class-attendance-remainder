@@ -55,6 +55,28 @@ public class HomeFragment extends Fragment {
             classViewModel.update(classModel);
         });
 
+        adapter.setOnClassActionListener(new ClassAdapter.OnClassActionListener() {
+            @Override
+            public void onEditClick(ClassModel classModel) {
+                Intent intent = new Intent(getContext(), AddClassActivity.class);
+                intent.putExtra("class_id", classModel.getId());
+                startActivity(intent);
+            }
+
+            @Override
+            public void onDeleteClick(ClassModel classModel) {
+                new androidx.appcompat.app.AlertDialog.Builder(requireContext())
+                        .setTitle("Delete Class")
+                        .setMessage("Are you sure you want to delete " + classModel.getName() + "?")
+                        .setPositiveButton("Delete", (dialog, which) -> {
+                            classViewModel.delete(classModel);
+                            android.widget.Toast.makeText(getContext(), "Class deleted", android.widget.Toast.LENGTH_SHORT).show();
+                        })
+                        .setNegativeButton("Cancel", null)
+                        .show();
+            }
+        });
+
         return view;
     }
 
